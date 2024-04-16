@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import express from "express";
 import dotenv from "dotenv";
-import { Product } from "./server/models/product.js";
 
 dotenv.config();
 
@@ -15,16 +14,10 @@ app.get("/", (req, res) => {
   res.send("Hello, from API")
 });
 
-app.post("/api/products", async (req, res) => {
-  // console.log(req.body)
-  // res.send(req.body)
-  try {
-    const product = await Product.create(req.body);
-    res.status(200).json(product);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+app.post("/api/products", (req, res) => {
+  console.log(req.body)
+  res.send(req.body)
+})
 
 //mongoDB connect then listen to app server at port
 mongoose.connect(process.env.MongoDB)
