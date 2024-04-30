@@ -1,6 +1,6 @@
 import Mongoose from "mongoose";
 
-// Define product schema
+/// Define product schema
 const ProductSchema = new Mongoose.Schema ({
   name: { type: String , required: true } ,
   description: { type: String , required: true },
