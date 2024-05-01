@@ -1,23 +1,22 @@
 import mongoose from 'mongoose';
 import express from "express";
 import dotenv from "dotenv";
+import { productRoute } from "./routes/product.js"
+import { Product } from "./models/product.js";
 
 dotenv.config();
 
+//middleware
 const app = express();
 
-//middleware
-app.use(express.json());
+//routes
+app.use("/api/products", productRoute);
 
 
 app.get("/", (req, res) => {
   res.send("Hello, from API")
 });
 
-app.post("/api/products", (req, res) => {
-  console.log(req.body)
-  res.send(req.body)
-})
 
 //mongoDB connect then listen to app server at port
 mongoose.connect(process.env.MongoDB)
