@@ -12,7 +12,7 @@ app.get("/", (req, res) => {
   res.send("Hello, from API")
 });
 
-//get all
+//create a product
 app.post("/api/products", async (req, res) => {
   try {
     const product = await Product.create(req.body);
@@ -22,17 +22,63 @@ app.post("/api/products", async (req, res) => {
   }
 });
 
+//get all product
+app.get("/api/products", async(req, res) => {
+  try {
+    const products = await Product.find({});
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+})
+
 
 //get one
-app.get("/api/products/:id", async(req,res) => {
+app.get("/api/product/:id", async(req,res) => {
   try {
-    const {id} = req.params
-    const product = await Product.findById({id});
+    const {id} = req.params;
+    const product = await Product.findById(id);
     res.status(200).json(product);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
+
+//update a product
+app.put("/api/product/:id", async(req,res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findByIdAndUpdate(id, req.body);
+
+    if (!product) {
+      return res.status(404).json({ message: "product does not exist!"})
+    }
+
+    const updatedProduct = await Product.findById(id);
+    res.status(200).json(updatedProduct);
+
+
+  } catch(error) {
+    res.status(500).json({ message: error.message });
+  }
+
+});
+
+//delete a product
+app.delete("/api/product/:id", async(req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findByIdAndDelete(id);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product does not exist"})
+    }
+    res.status(200).json({ message: "Product has now been deleted"})
+
+  } catch (error) {
+    res.status(500).json({ message: error.message})
+  }
+})
 
 //mongoDB connect then listen to app server at port
 mongoose.connect(process.env.MongoDB)
