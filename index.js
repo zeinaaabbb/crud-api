@@ -12,12 +12,22 @@ app.get("/", (req, res) => {
   res.send("Hello, from API")
 });
 
-
+//get all
 app.post("/api/products", async (req, res) => {
-  // console.log(req.body)
-  // res.send(req.body)
   try {
     const product = await Product.create(req.body);
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+
+//get one
+app.get("/api/products/:id", async(req,res) => {
+  try {
+    const {id} = req.params
+    const product = await Product.findById({id});
     res.status(200).json(product);
   } catch (error) {
     res.status(500).json({ message: error.message });
